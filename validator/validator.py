@@ -8,17 +8,41 @@ from parserr import *
 #'''
 
 input_string = '''
- PRINT x;
-    IF quantity THEN
-        total := total;
-        tax := 0.05;
-    ENDIF;
+version: "3.9"
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - "8080:80"
+    networks:
+      - overlay
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: vip
+
+  mysql:
+    image: mysql
+    volumes:
+       - db-data:/var/lib/mysql/data
+    networks:
+       - overlay
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: dnsrr
+
+volumes:
+  db-data:
+
+networks:
+  overlay:
 '''
 
 print(input_string)
 scanner = Scanner(input_string)
-print(scanner.tokens)
+print(scanner.tokens) 
 
-parser = Parserx(scanner)
+parser = Parser(scanner)
 parser.start()
-  
