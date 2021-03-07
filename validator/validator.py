@@ -1,5 +1,5 @@
 from scanner import *
-from parser import *
+from parserr import *
 
 #input_string = '''
 #x := 5;
@@ -15,10 +15,10 @@ input_string = '''
     ENDIF;
 '''
 
-print input_string
+print(input_string)
 scanner = Scanner(input_string)
-#print scanner.tokens
+print(scanner.tokens)
 
-parser = Parser(scanner)
+parser = Parserx(scanner)
 parser.start()
   

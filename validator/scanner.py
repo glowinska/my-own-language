@@ -9,7 +9,7 @@ class Scanner:
     self.tokens = []
     self.current_token_number = 0
     for token in self.tokenize(input):
-	self.tokens.append(token)
+	    self.tokens.append(token)
  
   def tokenize(self, input_string):
     keywords = {'IF', 'THEN', 'ENDIF', 'FOR', 'NEXT', 'GOSUB', 'RETURN', 'PRINT', 'EOF'}
@@ -50,4 +50,3 @@ class Scanner:
       return self.tokens[self.current_token_number-1]
     else:
       raise RuntimeError('Error: No more tokens')
-

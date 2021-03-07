@@ -1,5 +1,4 @@
-
-class Parser:
+class Parserx:
 
   ##### Parser header #####
   def __init__(self, scanner):
@@ -54,7 +53,7 @@ class Parser:
       self.take_token('PRINT')
       self.value()
       self.take_token('END')
-      print "print_stmt OK"
+      print("print_stmt OK") 
     else:
       self.error("Epsilon not allowed")
    
@@ -65,7 +64,7 @@ class Parser:
       self.take_token('ASSIGN')      
       self.value()
       self.take_token('END')
-      print "assign_stmt OK"
+      print("assign_stmt OK") 
     else:
       self.error("Epsilon not allowed")
   
@@ -88,7 +87,7 @@ class Parser:
       self.program()
       self.take_token('ENDIF')
       self.take_token('END')
-      print "if_stmt OK"
+      print("if_stmt OK") 
     else:
       self.error("Epsilon not allowed")
        
