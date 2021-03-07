@@ -12,15 +12,18 @@ class Scanner:
 	    self.tokens.append(token)
  
   def tokenize(self, input_string):
-    keywords = {'IF', 'THEN', 'ENDIF', 'FOR', 'NEXT', 'GOSUB', 'RETURN', 'PRINT', 'EOF'}
+    keywords = {'build:', 'environment:', 'version:', 'services:', 'image:', 'ports:', 'networks:', 'deploy:', 'mode:', 'replicas:', 'endpoint_mode:', 'volumes:'}
     token_specification = [
         ('NUMBER',  r'\d+(\.\d*)?'), # Integer or decimal number
         ('ASSIGN',  r':='),          # Assignment operator
         ('END',     r';'),           # Statement terminator
-        ('ID',      r'[A-Za-z]+'),   # Identifiers
-        ('OP',      r'[+*\/\-]'),    # Arithmetic operators
+        ('OP',      r'[-]'),    # Arithmetic operators
+        ('ID',      r'[A-Za-z_-]+:'),   # Identifiers
+        ('ID2',     r'[A-Za-z-/:]+'),   # Identifiers
         ('NEWLINE', r'\n'),          # Line endings
-        ('SKIP',    r'[ \t]'),       # Skip over spaces and tabs
+        ('SKIP',    r'[\x20\t]+'),       # Skip over spaces and tabs
+        ('PORT',    r'("([0-9]{2,5})+:([0-9]{2,5})")'), # Port value
+        ('VERSION', r'("\d+(\.\d*)?")'), # Version value
     ]
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     get_token = re.compile(tok_regex).match
@@ -34,7 +37,7 @@ class Scanner:
             line_number += 1
         elif type != 'SKIP':
             value = match.group(type)
-            if type == 'ID' and value in keywords:
+            if (type == 'ID' or type == 'ID2' or type == 'PORT') and value in keywords:
                 type = value
             yield Token(type, value, line_number, match.start()-line_start)
         current_position = match.end()
@@ -50,3 +53,4 @@ class Scanner:
       return self.tokens[self.current_token_number-1]
     else:
       raise RuntimeError('Error: No more tokens')
+
