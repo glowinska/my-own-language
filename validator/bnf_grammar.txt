@@ -1,0 +1,29 @@
+    <start> ::= <program> <EOF>
+
+    <program> ::= <keyword><program> | <eps>
+
+    <keyword> ::= <services_keyword> | <version_keyword> | <volumes_keyword> | <networks_keyword> | <build_keyword> | <environment_keyword>
+
+
+    <services_keyword> ::= <WORD><services_keyword> 
+                            | <networks_keyword><OP><value><services_keyword> 
+                            | <image_keyword><value><services_keyword> 
+                            | <ports_keyword><OP><PORT><services_keyword>
+                            | <deploy_keyword><deploy><services_keyword> 
+                            | <volumes_keyword><OP><value><services_keyword>
+                            | <program>
+
+    <version_keyword> ::= <VERSION>
+
+    <volumes_keyword> ::= <WORD>
+    
+    <networks_keyword> ::= <WORD>
+
+    <build_keyword> ::= <WORD>
+    
+    <environment_keyword> ::= <WORD>
+    
+    <deploy> ::= <mode_keyword><NUMBER> | <replicas_keyword><NUMBER> | <endpoint_mode_keyword><NUMBER>
+  
+    <value> ::= <NUMBER> | <ID>
+       
