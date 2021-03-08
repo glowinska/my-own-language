@@ -1,0 +1,36 @@
+    # start -> program EOF
+
+    # program -> keyword program
+    # program -> eps
+
+    # keyword -> services_keyword
+    # keyword -> version_keyword 
+    # keyword -> volumes_keyword
+    # keyword -> networks_keyword
+    # keyword -> build_keyword
+    # keyword -> environment_keyword
+
+    # services_keyword -> WORD services_keyword 
+    # services_keyword -> networks_keyword OP value services_keyword 
+    # services_keyword -> image_keyword value services_keyword 
+    # services_keyword -> ports_keyword OP PORT services_keyword 
+    # services_keyword -> deploy_keyword deploy services_keyword 
+    # services_keyword -> volumes_keyword OP value services_keyword 
+    # services_keyword -> program
+
+    # version_keyword -> VERSION
+
+    # volumes_keyword -> WORD
+    
+    # networks_keyword -> WORD
+
+    # build_keyword -> WORD
+    
+    # environment_keyword -> WORD
+    
+    # deploy -> mode_keyword value
+    # deploy -> replicas_keyword NUMBER
+    # deploy -> endpoint_mode_keyword value
+  
+    # value -> NUMBER
+    # value -> ID
