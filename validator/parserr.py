@@ -1,4 +1,4 @@
-class Parserx:
+class Parser:
 
   ##### Parser header #####
   def __init__(self, scanner):
