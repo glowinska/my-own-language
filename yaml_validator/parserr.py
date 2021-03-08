@@ -33,6 +33,58 @@ class Parser:
     # program -> eps
     else:
       pass
+
+  def keyword(self):
+    # keyword -> services_keyword
+    if self.token.type == 'services:':
+      self.take_token('services:')
+      self.services()
+    # keyword -> version_keyword 
+    elif self.token.type == 'version:':
+      self.take_token('version:')
+      self.version()
+    # keyword -> volumes_keyword
+    elif self.token.type == 'volumes:':
+      self.take_token('volumes:')
+      self.volumes()
+    # keyword -> networks_keyword
+    elif self.token.type == 'networks:':
+      self.take_token('networks:')
+      self.networks()
+    else:
+      self.error("Epsilon not allowed")
+
+  def services(self):
+    # services_keyword -> WORD services_keyword 
+    if self.token.type == 'WORD':
+      self.take_token('WORD')
+      self.services()
+    else:
+      print("Services OK")
+
+  def volumes(self):
+    # volumes_keyword -> WORD
+    if self.token.type == 'WORD':
+      self.take_token('WORD')
+      print("Volumes OK")
+    else:
+      self.error("Epsilon not allowed")
+    
+  def networks(self):
+    # networks_keyword -> WORD
+    if self.token.type == 'WORD':
+      self.take_token('WORD')
+      print("Networks OK")
+    else:
+      self.error("Epsilon not allowed")
+
+  def version(self):
+    # version_keyword -> VERSION
+    if self.token.type == 'VERSION':
+      self.take_token('VERSION')
+      print("Version OK")
+    else:
+      self.error("Epsilon not allowed")
   
   def value(self):
     # value -> NUMBER
