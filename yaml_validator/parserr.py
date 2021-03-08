@@ -59,6 +59,47 @@ class Parser:
     if self.token.type == 'WORD':
       self.take_token('WORD')
       self.services()
+    # services_keyword -> networks_keyword OP value services_keyword 
+    elif self.token.type == 'networks:':
+      self.take_token('networks:')
+      if self.token.type == 'OP':
+        self.take_token('OP')
+        self.value()
+        print("Networks OK")
+        self.services()
+      # services_keyword -> program
+      else: 
+        self.networks()
+    # services_keyword -> image_keyword value services_keyword 
+    elif self.token.type == 'image:':
+      self.take_token('image:')
+      self.value()
+      print("Image OK")
+      self.services()
+    # services_keyword -> ports_keyword OP PORT services_keyword 
+    elif self.token.type == 'ports:':
+      self.take_token('ports:')
+      self.take_token('OP')
+      self.take_token('PORT')
+      print("Ports OK")
+      self.services()
+    # services_keyword -> deploy_keyword deploy services_keyword 
+    elif self.token.type == 'deploy:':
+      self.take_token('deploy:')
+      self.deploy()
+      self.services()
+    # services_keyword -> volumes_keyword OP value services_keyword 
+    elif self.token.type == 'volumes:':
+      self.take_token('volumes:')
+      if self.token.type == 'OP':
+        self.take_token('OP')
+        self.take_token('WORD')
+        self.value()
+        print("Volumes OK")
+        self.services()
+      # services_keyword -> program
+      else: 
+        self.volumes()
     else:
       print("Services OK")
 
@@ -85,6 +126,28 @@ class Parser:
       print("Version OK")
     else:
       self.error("Epsilon not allowed")
+    
+  def deploy(self):
+    # deploy -> mode_keyword value
+    if self.token.type == 'mode:':
+      self.take_token('mode:')
+      self.value()
+      print("Mode OK")
+      self.deploy()
+    # deploy -> replicas_keyword NUMBER
+    elif self.token.type == 'replicas:':
+      self.take_token('replicas:')
+      self.take_token('NUMBER')
+      print("Replicas OK")
+      self.deploy()
+    # deploy -> endpoint_mode_keyword value
+    elif self.token.type == 'endpoint_mode:':
+      self.take_token('endpoint_mode:')
+      self.value()
+      print("Endpoint_mode OK")
+      self.deploy()
+    else: 
+      print("Deploy OK")
   
   def value(self):
     # value -> NUMBER
