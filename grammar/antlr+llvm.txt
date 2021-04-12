@@ -1,0 +1,22 @@
+1) Wygenerowanie analizatorów z pliku .g4
+   ANTLR, albo ANTLR-Works code generation
+$ java -jar ../antlr-4.9.2-complete.jar Grammar.g4
+
+2) Skompilowanie kompilatora
+$ javac -cp ../antlr-4.9.2-complete.jar:. *.java
+
+3) Uruchomienie kompilatora przekształcającego PL -> ll
+$ java -cp ../antlr-4.9.2-complete.jar:. Main example.PL > example.ll
+
+4) Możliwości wygenerowanie kodu wykonywalnego 
+
+   a) Bytecode dla LLVM
+      $ llvm-as example.ll
+      $ lli example.bc
+
+   b) Kod maszynowy
+      $ llc example.ll
+      $ clang example.s
+
+   c) Interpretacja
+      $ lli example.ll
