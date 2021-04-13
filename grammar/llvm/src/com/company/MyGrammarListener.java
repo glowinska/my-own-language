@@ -31,19 +31,50 @@ public class MyGrammarListener extends GrammarBaseListener {
     public void exitAssign(GrammarParser.AssignContext ctx) {
         var id = ctx.getChild(0).getText();
         var expr = ctx.getText();
-        var val = ctx.getChild(2).getText();
-        if (!this.declarations.containsKey(id)) {
-                LLVMGrammar.declare_i32(id);
-                this.declarations.put(id, TYPE.INT);
+
+        if (ctx.getChild(2).getChildCount() > 1 || ctx.getChild(2).getChild(0).getChildCount() > 1) {
+            if (expr.contains(".")) {
+                if (!this.declarations.containsKey(id)) {
+                    LLVMGrammar.declare_double(id);
+                    this.declarations.put(id, TYPE.REAL);
+                }
+                LLVMGrammar.assign_last_double(id);
+
+            } else {
+                if (!this.declarations.containsKey(id)) {
+                    LLVMGrammar.declare_i32(id);
+                    this.declarations.put(id, TYPE.INT);
+                }
+                LLVMGrammar.assign_last_i32(id);
             }
-        LLVMGrammar.assign_i32(id, val);  
+        } else {
+            var val = ctx.getChild(2).getText();
+            if (val.contains(".")) {
+                if (!this.declarations.containsKey(id)) {
+                    LLVMGrammar.declare_double(id);
+                    this.declarations.put(id, TYPE.REAL);
+                }
+                LLVMGrammar.assign_double(id, val);
+            } else {
+                if (!this.declarations.containsKey(id)) {
+                    LLVMGrammar.declare_i32(id);
+                    this.declarations.put(id, TYPE.INT);
+                }
+                LLVMGrammar.assign_i32(id, val);
+            }
+        }
     }
 
     @Override
     public void exitPrint(GrammarParser.PrintContext ctx) {
         var id = ctx.getChild(1).getText();
         var type = this.declarations.get(id);
-        LLVMGrammar.printf_i32(id);
+
+        if (type == TYPE.REAL) {
+            LLVMGrammar.printf_double(id);
+        } else if (type == TYPE.INT) {
+            LLVMGrammar.printf_i32(id);
+        }
     }
 
 
@@ -54,7 +85,11 @@ public class MyGrammarListener extends GrammarBaseListener {
     @Override
     public void exitReadi(GrammarParser.ReadiContext ctx) {
         var id = ctx.getChild(1).getText();
-        LLVMGrammar.declare_i32(id);
+
+        if (!this.declarations.containsKey(id)) {
+            LLVMGrammar.declare_i32(id);
+            this.declarations.put(id, TYPE.INT);
+        }
         LLVMGrammar.read_i32(id);
     }
 
@@ -62,6 +97,10 @@ public class MyGrammarListener extends GrammarBaseListener {
     public void exitReadr(GrammarParser.ReadrContext ctx) {
         var id = ctx.getChild(1).getText();
 
+        if (!this.declarations.containsKey(id)) {
+            LLVMGrammar.declare_double(id);
+            this.declarations.put(id, TYPE.REAL);
+        }
         LLVMGrammar.read_double(id);
     }
 
@@ -81,7 +120,11 @@ public class MyGrammarListener extends GrammarBaseListener {
         var val1 = ctx.getChild(0).getText();
         var val2 = ctx.getChild(2).getText();
 
-        LLVMGrammar.add_i32(val1, val2);
+        if (expr.contains(".")) {
+            LLVMGrammar.add_double(val1, val2);
+        } else {
+            LLVMGrammar.add_i32(val1, val2);
+        }
     }
 
     @Override
@@ -95,7 +138,11 @@ public class MyGrammarListener extends GrammarBaseListener {
         var val1 = ctx.getChild(0).getText();
         var val2 = ctx.getChild(2).getText();
 
-        LLVMGrammar.mult_i32(val1, val2);
+        if (expr.contains(".")) {
+            LLVMGrammar.mult_double(val1, val2);
+        } else {
+            LLVMGrammar.mult_i32(val1, val2);
+        }
 
     }
 
