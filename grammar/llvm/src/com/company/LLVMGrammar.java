@@ -13,7 +13,9 @@ public class LLVMGrammar {
     }
 
     public static void printf_double(String id) {
-        }
+        main_text += "%" + reg++ + " = load double* %" + id + "\n";
+        main_text += "%" + reg++ + " = call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([4 x i8]* @strpd, i32 0, i32 0), double %" + (reg - 2) + ")\n";
+    }
 
     public static void printf_string(String textString) {
         }
@@ -23,7 +25,8 @@ public class LLVMGrammar {
     }
 
     public static void declare_double(String id) {
-        }
+        main_text += "%" + id + " = alloca double\n";
+    }
 
     public static void assign_i32(String id, String value) {
         main_text += "store i32 " + value + ", i32* %" + id + "\n";
@@ -34,16 +37,19 @@ public class LLVMGrammar {
     }
 
     public static void assign_double(String id, String value) {
-        }
+        main_text += "store double " + value + ", double* %" + id + "\n";
+    }
 
     public static void assign_last_double(String id) {
-        }
+        main_text += "store double %" + (reg - 1) + ", double* %" + id + "\n";
+    }
 
     public static void read_i32(String id) {
         main_text += "%" + reg++ + " = call i32 (i8*, ...)* @scanf(i8* getelementptr inbounds ([3 x i8]* @strsi, i32 0, i32 0), i32* %" + id + ")\n";
     }
 
     public static void read_double(String id) {
+        main_text += "%" + reg++ + " = call i32 (i8*, ...)* @scanf(i8* getelementptr inbounds ([3 x i8]* @strsd, i32 0, i32 0), double* %" + id + ")\n";
     }
 
     public static void add_i32(String val1, String val2) {
@@ -51,6 +57,7 @@ public class LLVMGrammar {
     }
 
     public static void add_double(String val1, String val2) {
+        main_text += "%" + reg++ + " = fadd double " + val1 + ", " + val2 + "\n";
     }
 
     public static void mult_i32(String val1, String val2) {
@@ -58,6 +65,7 @@ public class LLVMGrammar {
     }
 
     public static void mult_double(String val1, String val2) {
+        main_text += "%" + reg++ + " = fmul double " + val1 + ", " + val2 + "\n";
     }
 
     public static String generate() {
