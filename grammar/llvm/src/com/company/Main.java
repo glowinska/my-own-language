@@ -12,11 +12,16 @@ public class Main {
 
     public static void main(String[] args) {
         String code = """
+                print "print\n"
+                print "5\n"
+                
                 a = 5
                 print a
                 
                 b = 5 + 5
                 print b
+                
+                print "\n"
                 
                 c = 5.5 + 0.05
                 print c
@@ -28,6 +33,7 @@ public class Main {
                 print e
                 
                 f = 2.5 * 4.5
+                print "wynik "
                 print f
                 """;
         GrammarLexer lexer = new GrammarLexer(CharStreams.fromString(code));

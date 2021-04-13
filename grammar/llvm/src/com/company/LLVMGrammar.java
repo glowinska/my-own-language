@@ -18,7 +18,10 @@ public class LLVMGrammar {
     }
 
     public static void printf_string(String textString) {
-        }
+        text += "@strps"+textString+" = constant ["+textString.length()+ " x i8] c\""+textString+"\"\n";
+        main_text += "%" + reg++ + " = getelementptr inbounds ["+textString.length()+" x i8]* @strps"+textString+", i32 0, i32 0\n";
+        main_text += "%" + reg++ + " = call i32 (i8*, ...)* @printf(i8* %"+(reg - 2)+")\n";
+    }
 
     public static void declare_i32(String id) {
         main_text += "%" + id + " = alloca i32\n";
@@ -82,6 +85,5 @@ public class LLVMGrammar {
         text += "ret i32 0 }\n";
         return text;
     }
-
 
 }

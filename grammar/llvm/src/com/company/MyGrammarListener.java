@@ -19,7 +19,7 @@ public class MyGrammarListener extends GrammarBaseListener {
     Map<String, TYPE> declarations = new HashMap<>();
 
     public String getResult() {
-        System.out.print("\n");
+        System.out.print("\n\n\n\n\n");
         return LLVMGrammar.generate();
     }
 
@@ -80,6 +80,8 @@ public class MyGrammarListener extends GrammarBaseListener {
 
     @Override
     public void exitPrints(GrammarParser.PrintsContext ctx) {
+        String text = ctx.getChild(1).getText().substring(1, ctx.getChild(1).getText().length()-1);
+        LLVMGrammar.printf_string(text);
     }
 
     @Override
