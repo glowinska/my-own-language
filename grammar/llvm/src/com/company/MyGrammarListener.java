@@ -19,38 +19,50 @@ public class MyGrammarListener extends GrammarBaseListener {
     Map<String, TYPE> declarations = new HashMap<>();
 
     public String getResult() {
-        
+        System.out.print("\n");
+        return LLVMGrammar.generate();
     }
 
     @Override
     public void exitProg(GrammarParser.ProgContext ctx) {
-
     }
 
     @Override
     public void exitAssign(GrammarParser.AssignContext ctx) {
-        
+        var id = ctx.getChild(0).getText();
+        var expr = ctx.getText();
+        var val = ctx.getChild(2).getText();
+        if (!this.declarations.containsKey(id)) {
+                LLVMGrammar.declare_i32(id);
+                this.declarations.put(id, TYPE.INT);
+            }
+        LLVMGrammar.assign_i32(id, val);  
     }
 
     @Override
     public void exitPrint(GrammarParser.PrintContext ctx) {
-        
+        var id = ctx.getChild(1).getText();
+        var type = this.declarations.get(id);
+        LLVMGrammar.printf_i32(id);
     }
 
 
     @Override
     public void exitPrints(GrammarParser.PrintsContext ctx) {
-        
     }
 
     @Override
     public void exitReadi(GrammarParser.ReadiContext ctx) {
-        
+        var id = ctx.getChild(1).getText();
+        LLVMGrammar.declare_i32(id);
+        LLVMGrammar.read_i32(id);
     }
 
     @Override
     public void exitReadr(GrammarParser.ReadrContext ctx) {
+        var id = ctx.getChild(1).getText();
 
+        LLVMGrammar.read_double(id);
     }
 
     @Override
@@ -65,7 +77,11 @@ public class MyGrammarListener extends GrammarBaseListener {
 
     @Override
     public void exitAdd(GrammarParser.AddContext ctx) {
+        var expr = ctx.getText();
+        var val1 = ctx.getChild(0).getText();
+        var val2 = ctx.getChild(2).getText();
 
+        LLVMGrammar.add_i32(val1, val2);
     }
 
     @Override
@@ -75,6 +91,11 @@ public class MyGrammarListener extends GrammarBaseListener {
 
     @Override
     public void exitMult(GrammarParser.MultContext ctx) {
+        var expr = ctx.getText();
+        var val1 = ctx.getChild(0).getText();
+        var val2 = ctx.getChild(2).getText();
+
+        LLVMGrammar.mult_i32(val1, val2);
 
     }
 
@@ -118,4 +139,7 @@ public class MyGrammarListener extends GrammarBaseListener {
         super.visitErrorNode(node);
     }
 
+    private enum TYPE {
+        REAL, INT, STRING
+    }
 }

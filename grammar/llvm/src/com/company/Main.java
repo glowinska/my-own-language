@@ -11,7 +11,12 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class Main {
 
     public static void main(String[] args) {
-        String code = "";
+        String code = """
+        a = 5
+        print a
+        
+        b = 5 + 5
+        print b""";
         GrammarLexer lexer = new GrammarLexer(CharStreams.fromString(code));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         GrammarParser parser = new GrammarParser(tokens);
